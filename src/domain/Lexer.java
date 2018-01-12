@@ -23,16 +23,22 @@ public class Lexer {
 	
 	public void lex() {
 		while(this.current<this.expression.length()) {
+			
+			// cas parenthèse ouvrante
 			if(isLeftBracket()) {
 				consume();
 				this.tokens.add(new Token(Token.TokenType.LEFTBRACKET,this.currentWord));
 				this.currentWord = "";
 			}
-			if(isRightBracket()) {
+			
+			// cas parenthèse fermante
+			else if(isRightBracket()) {
 				consume();
 				this.tokens.add(new Token(Token.TokenType.RIGHTBRACKET,this.currentWord));
 				this.currentWord = "";
 			}
+			
+			//cas nombre
 			else if (isNumber()) {
 				consume();
 				while(isNumber() && this.current < this.expression.length()-1) {
@@ -41,11 +47,15 @@ public class Lexer {
 				this.tokens.add(new Token(Token.TokenType.NUMBER,this.currentWord));
 				this.currentWord = "";
 			}
+			
+			// cas opérateur * / 
 			else if (isOperateurMulti()) {
 				consume();
 				this.tokens.add(new Token(Token.TokenType.OperateurMULTI,this.currentWord));
 				this.currentWord = "";
 			}
+			
+			// cas opérateur + -
 			else if (isOperateurPlus()) {
 				consume();
 				this.tokens.add(new Token(Token.TokenType.OperateurPLUS,this.currentWord));
@@ -53,7 +63,7 @@ public class Lexer {
 			}
 		}
 	}
-	
+	//  Ensemble des tests sur la chaine de caractère
 	private boolean isLeftBracket() {
 		return "(".contains(this.currentChar);
 	}
@@ -74,6 +84,7 @@ public class Lexer {
 		return "+-".contains(this.currentChar);
 	}
 	
+	// itération d'une unité dans la chaine de caractère
 	private void consume() {
 		  try {
 				this.currentWord += this.currentChar;
